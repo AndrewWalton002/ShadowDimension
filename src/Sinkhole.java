@@ -1,2 +1,2 @@
-public class Sinkhole {
+public class Sinkhole extends StationaryEntity{
 }

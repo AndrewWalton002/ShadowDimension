@@ -19,7 +19,7 @@ public class ShadowDimension extends AbstractGame {
     private final double MAX_TIME_SCALE = 3;
     private final double MIN_TIME_SCALE = -3;
 
-    /** Font attributes */
+    /** Font attributes, not static due to fonts being buggy*/
     private final String FONT_PATH = "res/frostbite.ttf";
     private final int DEFAULT_FONT_SIZE = 75;
     private final Font DEFAULT_FONT = new Font(FONT_PATH, DEFAULT_FONT_SIZE);
@@ -32,6 +32,9 @@ public class ShadowDimension extends AbstractGame {
 
     public static int getWindowWidth(){
         return WINDOW_WIDTH;
+    }
+    public static int getWindowHeight(){
+        return WINDOW_HEIGHT;
     }
     public static String getGameTitle(){
         return GAME_TITLE;
@@ -53,20 +56,11 @@ public class ShadowDimension extends AbstractGame {
      */
     public static void main(String[] args) {
         ShadowDimension game = getInstance();
-        //ShadowDimension game = new ShadowDimension();
         game.run();
     }
 
-    /**
-     * Method used to read file and create objects (You can change this
-     * method as you wish).
-     */
-    private void readCSV(){
-
-    }
 
     /** Ensures there is only one instance of the game and gets that game instance
-     *
      * @return ShadowDimension the current instance of the game
      */
     public static ShadowDimension getInstance() {

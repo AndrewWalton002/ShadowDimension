@@ -9,11 +9,24 @@ public class Level0 extends Level {
 
     private final int START_MES_GAP_X = 90;
     private final int START_MES_GAP_Y = 190;
+    private static final  String BACKGROUND_STR = "res/background0.png";
+    private static final Image BACKGROUND_IMAGE = new Image(BACKGROUND_STR);
 
 
     public Level0(){
         super();
         gameState = GameState.START_SCREEN;
+    }
+
+    @Override
+    public void runLevel(Input input){
+        super.runLevel(input);
+        switch (gameState){
+            case LEVEL_RUNNING:
+                BACKGROUND_IMAGE.draw(ShadowDimension.getWindowWidth()/2,ShadowDimension.getWindowHeight() / 2);
+        }
+
+
     }
 
     public void drawStartScreen(){
