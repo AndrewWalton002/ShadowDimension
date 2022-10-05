@@ -4,13 +4,14 @@ import bagel.*;
  * Skeleton Code for SWEN20003 Project 2, Semester 2, 2022
  *
  * Please enter your name below
- * @author
+ * @author Andrew Walton 1272468
  */
 
 public class ShadowDimension extends AbstractGame {
     private final static int WINDOW_WIDTH = 1024;
     private final static int WINDOW_HEIGHT = 768;
     private final static String GAME_TITLE = "SHADOW DIMENSION";
+
 
     /** Time Scale attributes */
     private double timeScale;
@@ -19,23 +20,40 @@ public class ShadowDimension extends AbstractGame {
     private final double MIN_TIME_SCALE = -3;
 
     /** Font attributes */
-    private static final String FONT_PATH = "res/frostbite.ttf";
-    private static final int DEFAULT_FONT_SIZE = 75;
-    private static final Font DEFAULT_FONT = new Font(FONT_PATH, DEFAULT_FONT_SIZE);
+    private final String FONT_PATH = "res/frostbite.ttf";
+    private final int DEFAULT_FONT_SIZE = 75;
+    private final Font DEFAULT_FONT = new Font(FONT_PATH, DEFAULT_FONT_SIZE);
 
     private static final int REFRESH_RATE = 60;
+    private Level levelInstance;
+    private Levels currentLevel = Levels.LEVEL_0;
 
+    private static ShadowDimension currentInstance;
 
+    public static int getWindowWidth(){
+        return WINDOW_WIDTH;
+    }
+    public static String getGameTitle(){
+        return GAME_TITLE;
+    }
+    public String getFontPath(){
+        return FONT_PATH;
+    }
+    public Font getDefaultFont(){
+        return DEFAULT_FONT;
+    }
 
     public ShadowDimension(){
         super(WINDOW_WIDTH, WINDOW_HEIGHT, GAME_TITLE);
+        levelInstance = new Level0();
     }
 
     /**
      * The entry point for the program.
      */
     public static void main(String[] args) {
-        ShadowDimension game = new ShadowDimension();
+        ShadowDimension game = getInstance();
+        //ShadowDimension game = new ShadowDimension();
         game.run();
     }
 
@@ -47,9 +65,21 @@ public class ShadowDimension extends AbstractGame {
 
     }
 
+    /** Ensures there is only one instance of the game and gets that game instance
+     *
+     * @return ShadowDimension the current instance of the game
+     */
+    public static ShadowDimension getInstance() {
+        if (currentInstance == null) {
+            currentInstance = new ShadowDimension();
+        }
+        return currentInstance;
+    }
+
     /**
      * Performs a state update.
-     * allows the game to exit when the escape key is pressed.
+     * allows the game to exit when the escape key is pressed.4
+     * @param input the user input
      */
     @Override
     protected void update(Input input) {
@@ -57,6 +87,7 @@ public class ShadowDimension extends AbstractGame {
         if (input.wasPressed(Keys.ESCAPE)){
             Window.close();
         }
+        levelInstance.runLevel(input);
 
     }
 }

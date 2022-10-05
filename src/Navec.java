@@ -1,2 +1,2 @@
-public class Navec extends AgressiveDemon{
+public class Navec extends AggressiveDemon{
 }
