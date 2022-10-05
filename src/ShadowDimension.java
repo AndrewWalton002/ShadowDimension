@@ -22,7 +22,7 @@ public class ShadowDimension extends AbstractGame {
     private static final String FONT_PATH = "res/frostbite.ttf";
     private static final int DEFAULT_FONT_SIZE = 75;
     private static final Font DEFAULT_FONT = new Font(FONT_PATH, DEFAULT_FONT_SIZE);
-    
+
     private static final int REFRESH_RATE = 60;
 
 

@@ -1,2 +1,4 @@
-public class Level {
+import bagel.*;
+public abstract class Level implements Drawable {
+
 }
