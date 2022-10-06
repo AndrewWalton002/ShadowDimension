@@ -1,4 +1,5 @@
 import bagel.Image;
+import bagel.Input;
 import bagel.util.Point;
 
 public class Sinkhole extends StationaryEntity{
@@ -27,7 +28,8 @@ public class Sinkhole extends StationaryEntity{
         super(position, width, height, BASE_DAMAGE, name);
     }
 
-    public void updateSinkhole(){
+    @Override
+    public void updateGameEntity(Input input){
         drawGameEntity(SINKHOLE_IM);
     }
 }

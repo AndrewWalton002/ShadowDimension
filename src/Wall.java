@@ -1,4 +1,5 @@
 import bagel.Image;
+import bagel.Input;
 import bagel.util.Point;
 
 public class Wall extends StationaryEntity{
@@ -25,7 +26,9 @@ public class Wall extends StationaryEntity{
         super(position, width, height, BASE_DAMAGE, name);
     }
 
-    public void updateWall(){
+    @Override
+    public void updateGameEntity(Input input) {
         drawGameEntity(WALL_IM);
     }
+
 }

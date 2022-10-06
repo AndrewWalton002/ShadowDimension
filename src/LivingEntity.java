@@ -1,3 +1,4 @@
+import bagel.Input;
 import bagel.util.Point;
 
 public abstract class LivingEntity extends GameEntity {
@@ -37,5 +38,8 @@ public abstract class LivingEntity extends GameEntity {
         this.currentHealth = max_health;
         this.healthBarPos = healthBarPos;
     }
+
+    public abstract void updateGameEntity(Input input);
+
 }
 

@@ -55,4 +55,6 @@ public abstract class GameEntity extends Rectangle implements Drawable {
         image.drawFromTopLeft(position.x, position.y);
     }
 
+    public abstract void updateGameEntity(Input input);
+
 }

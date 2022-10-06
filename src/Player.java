@@ -48,7 +48,8 @@ public class Player extends LivingEntity{
         setHealthBarPos(PLAYER_HEALTH_BAR_POS);
     }
 
-    public void updatePlayer(Input input) {
+    @Override
+    public void updateGameEntity(Input input) {
         drawGameEntity(STANDARD_LEFT_IM);
     }
 }

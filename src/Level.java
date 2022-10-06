@@ -2,6 +2,7 @@ import bagel.*;
 import bagel.util.Point;
 
 import java.io.FileReader;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public abstract class Level /**implements Drawable*/ {
@@ -10,17 +11,18 @@ public abstract class Level /**implements Drawable*/ {
     private final int START_MES_SIZE = 40;
     private final int INTRA_START_MES_GAP = 50;
 
+    private ArrayList<GameEntity> gameEntities = new ArrayList<GameEntity>();
+    private Player player;
+
     // NEED TO CHANGE TO READ CSV
-    private Point playerPos = new Point(100, 100);
-    private Player player = new Player(playerPos,Player.getPlayerBaseDamage(),Player.getPlayerName(), Player.getPlayerMaxHealth());
-    private Point wallPos = new Point(200, 200);
-    private Wall wall = new Wall(wallPos, Wall.getWallWidth(), Wall.getWallHeight(),Wall.getWallBaseDamage(), Wall.getWallName());
-    private Point sinkholePos = new Point(300, 300);
-    private Sinkhole sinkhole = new Sinkhole(sinkholePos, Sinkhole.getSinkholeWidth(), Sinkhole.getSinkholeHeight(), Sinkhole.getSinkholeDamage(), Sinkhole.getSinkholeName());
+    //private Point playerPos = new Point(100, 100);
+    //private Player player = new Player(playerPos,Player.getPlayerBaseDamage(),Player.getPlayerName(), Player.getPlayerMaxHealth());
+    //private Point wallPos = new Point(200, 200);
+    //private Wall wall = new Wall(wallPos, Wall.getWallWidth(), Wall.getWallHeight(),Wall.getWallBaseDamage(), Wall.getWallName());
+    //private Point sinkholePos = new Point(300, 300);
+    //private Sinkhole sinkhole = new Sinkhole(sinkholePos, Sinkhole.getSinkholeWidth(), Sinkhole.getSinkholeHeight(), Sinkhole.getSinkholeDamage(), Sinkhole.getSinkholeName());
 
     private GameState gameState;
-
-
     public void setGameState(GameState gameState) {
         this.gameState = gameState;
     }
@@ -46,6 +48,7 @@ public abstract class Level /**implements Drawable*/ {
     }
 
     public Level(){
+
     }
 
     /** Runs the level depending on the current game state
@@ -59,10 +62,11 @@ public abstract class Level /**implements Drawable*/ {
                 break;
             case LEVEL_RUNNING:
                 drawBackground();
-                //NEED TO UPDATE ALL GAME ENTITIES
-                player.updatePlayer(input);
-                wall.updateWall();
-                sinkhole.updateSinkhole();
+
+                player.updateGameEntity(input);
+                gameEntities.forEach((gameEntity -> gameEntity.updateGameEntity(input)));
+
+
                 break;
 
         }
@@ -87,20 +91,53 @@ public abstract class Level /**implements Drawable*/ {
         }
     }
 
-    public void readCSV(int levelNum){
-        String CSVpath = "res/level" + levelNum + ".png";
+    public void readCSV(int levelNum) {
+        String CSVpath = "res/level" + levelNum + ".csv";
 
         int identifierIndex = 0;
         int xCoordIndex = 1;
         int yCoordIndex = 2;
 
-        try (Scanner file = new Scanner(new FileReader(CSVpath))){
+        System.out.println(CSVpath);
 
-            
+        try (Scanner file = new Scanner(new FileReader(CSVpath))) {
+
+            Point topLeft = null;
+            Point bottomRight = null;
+
+            while (file.hasNextLine()) {
+
+                String[] currentLine = file.nextLine().split(",");
+
+                Point objectPosition = new Point(Double.parseDouble(currentLine[xCoordIndex]),
+                        Double.parseDouble(currentLine[yCoordIndex]));
+
+                // Create the player at the defined position
+                if (currentLine[identifierIndex].compareTo(Player.getPlayerName()) == 0){
+                    player = new Player(objectPosition, Player.getPlayerBaseDamage(),
+                                        Player.getPlayerName(), Player.getPlayerMaxHealth());
+                }
+
+                // Add a wall at the defined position
+                else if (currentLine[identifierIndex].compareTo(Wall.getWallName()) == 0){
+                    Wall wall = new Wall(objectPosition, Wall.getWallWidth(), Wall.getWallHeight(),
+                                        Wall.getWallBaseDamage(), Wall.getWallName());
+                    gameEntities.add(wall);
+                }
+
+                else if (currentLine[identifierIndex].compareTo((Sinkhole.getSinkholeName())) == 0){
+                    Sinkhole sinkhole = new Sinkhole(objectPosition, Sinkhole.getSinkholeWidth(),
+                                                Sinkhole.getSinkholeHeight(), Sinkhole.getSinkholeDamage(),
+                                                Sinkhole.getSinkholeName());
+                    gameEntities.add(sinkhole);
+                }
+
+            }
         // Catch an error in the CSV file
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
+    }
 
     public abstract void drawStartScreen();
     public abstract void drawBackground();
