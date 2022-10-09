@@ -19,7 +19,6 @@ public class Level0 extends Level {
 
     public Level0(){
         super();
-        System.out.println("hi");
         readCSV(LEVEL_NUM);
         setGameState(GameState.START_SCREEN);
     }

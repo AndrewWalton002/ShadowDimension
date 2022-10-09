@@ -30,6 +30,10 @@ public class ShadowDimension extends AbstractGame {
 
     private static ShadowDimension currentInstance;
 
+    public Level getLevelInstance() {
+        return levelInstance;
+    }
+
     public static int getWindowWidth(){
         return WINDOW_WIDTH;
     }

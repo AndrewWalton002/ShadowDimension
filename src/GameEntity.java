@@ -56,5 +56,4 @@ public abstract class GameEntity extends Rectangle implements Drawable {
     }
 
     public abstract void updateGameEntity(Input input);
-
 }

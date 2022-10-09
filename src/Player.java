@@ -1,11 +1,12 @@
 import bagel.Image;
 import bagel.Input;
+import bagel.Keys;
 import bagel.util.Point;
 
 public class Player extends LivingEntity{
     private final String STANDARD_LEFT_PATH = "res/fae/faeLeft.png";
     private final Image STANDARD_LEFT_IM = new Image(STANDARD_LEFT_PATH);
-    private final String STANDARD_RIGHT_PATH = "res/fae/faeLeft.png";
+    private final String STANDARD_RIGHT_PATH = "res/fae/faeRight.png";
     private final Image STANDARD_RIGHT_IM = new Image(STANDARD_RIGHT_PATH);
     private final String ATTACK_LEFT_PATH = "res/fae/faeAttackLeft.png";
     private final Image ATTACK_LEFT_IM = new Image(ATTACK_LEFT_PATH);
@@ -17,7 +18,6 @@ public class Player extends LivingEntity{
     private final int ATTACK_COOLDOWN = 2000;
     private final int ATTACK_TIME = 1000;
     private PlayerState playerState = PlayerState.IDLE;
-    private boolean isFacingRight = true;
     private static final int PLAYER_BASE_DAMAGE = 20;
     private static final String PLAYER_NAME = "Fae";
     private static int PLAYER_MAX_HEALTH = 100;
@@ -50,6 +50,54 @@ public class Player extends LivingEntity{
 
     @Override
     public void updateGameEntity(Input input) {
-        drawGameEntity(STANDARD_LEFT_IM);
+
+        Point newPos = getNewPosition(input);
+
+        if (isValidMove(newPos)) {
+            setPosition(newPos);
+        }
+        drawGameEntity(currentPlayerImage());
+    }
+
+    /** Determine which image of the player should be rendered
+     *
+     * @return Image the current image of the player
+     */
+    public Image currentPlayerImage(){
+        if (playerState == PlayerState.ATTACK) {
+            //NEED TO DEAL WITH PLAYER WIDTH
+            // setWidth(ATTACK_WIDTH);
+
+            if (isFacingRight()) {
+                return ATTACK_RIGHT_IM;
+            } else {
+                return ATTACK_LEFT_IM;
+            }
+        } else {
+            if (isFacingRight()) {
+                return STANDARD_RIGHT_IM;
+            } else {
+                return STANDARD_LEFT_IM;
+            }
+
+        }
+    }
+
+    public Point getNewPosition(Input input) {
+        Point newPosition = getPosition();
+
+        // Update the position and orientation of the player in accordance with the input
+        if (input.isDown(Keys.LEFT)) {
+            newPosition = new Point(getPosition().x - getMovementSpeed(), getPosition().y);
+            setIsFacingRight(false);
+        } else if (input.isDown(Keys.RIGHT)) {
+            newPosition = new Point(getPosition().x + getMovementSpeed(), getPosition().y);
+            setIsFacingRight(true);
+        }else if (input.isDown(Keys.UP)) {
+            newPosition = new Point(getPosition().x, getPosition().y - getMovementSpeed());
+        }else if (input.isDown(Keys.DOWN)) {
+            newPosition = new Point(getPosition().x, getPosition().y + getMovementSpeed());
+        }
+        return newPosition;
     }
 }

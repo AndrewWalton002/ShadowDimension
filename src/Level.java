@@ -1,5 +1,6 @@
 import bagel.*;
 import bagel.util.Point;
+import bagel.util.Rectangle;
 
 import java.io.FileReader;
 import java.util.ArrayList;
@@ -10,21 +11,25 @@ public abstract class Level /**implements Drawable*/ {
     private final String START_INSTRUCTION = "PRESS SPACE TO START";
     private final int START_MES_SIZE = 40;
     private final int INTRA_START_MES_GAP = 50;
+    private final String TOP_LEFT_INDICATOR = "TopLeft";
+    private final String BOTTOM_RIGHT_INDICATOR = "BottomRight";
 
     private ArrayList<GameEntity> gameEntities = new ArrayList<GameEntity>();
     private Player player;
-
-    // NEED TO CHANGE TO READ CSV
-    //private Point playerPos = new Point(100, 100);
-    //private Player player = new Player(playerPos,Player.getPlayerBaseDamage(),Player.getPlayerName(), Player.getPlayerMaxHealth());
-    //private Point wallPos = new Point(200, 200);
-    //private Wall wall = new Wall(wallPos, Wall.getWallWidth(), Wall.getWallHeight(),Wall.getWallBaseDamage(), Wall.getWallName());
-    //private Point sinkholePos = new Point(300, 300);
-    //private Sinkhole sinkhole = new Sinkhole(sinkholePos, Sinkhole.getSinkholeWidth(), Sinkhole.getSinkholeHeight(), Sinkhole.getSinkholeDamage(), Sinkhole.getSinkholeName());
+    private Rectangle levelBounds;
 
     private GameState gameState;
+    private static Level levelInstance;
     public void setGameState(GameState gameState) {
         this.gameState = gameState;
+    }
+
+    public ArrayList<GameEntity> getGameEntities() {
+        return gameEntities;
+    }
+
+    public Rectangle getLevelBounds() {
+        return levelBounds;
     }
 
     public static String getLossMessage(){
@@ -98,7 +103,6 @@ public abstract class Level /**implements Drawable*/ {
         int xCoordIndex = 1;
         int yCoordIndex = 2;
 
-        System.out.println(CSVpath);
 
         try (Scanner file = new Scanner(new FileReader(CSVpath))) {
 
@@ -130,6 +134,22 @@ public abstract class Level /**implements Drawable*/ {
                                                 Sinkhole.getSinkholeHeight(), Sinkhole.getSinkholeDamage(),
                                                 Sinkhole.getSinkholeName());
                     gameEntities.add(sinkhole);
+                }
+
+
+                    // Determine to boundaries of the game from the CSV information
+                else if (currentLine[identifierIndex].compareTo(TOP_LEFT_INDICATOR) == 0){
+                        topLeft = new Point(Double.parseDouble(currentLine[xCoordIndex]),
+                                Double.parseDouble(currentLine[yCoordIndex]));
+                } else if (currentLine[identifierIndex].compareTo(BOTTOM_RIGHT_INDICATOR) == 0){
+                        bottomRight = new Point(Double.parseDouble(currentLine[xCoordIndex]),
+                                Double.parseDouble(currentLine[yCoordIndex]));
+                }
+
+                // Create the rectangle that the game is played inside
+                if (topLeft != null && bottomRight != null){
+                    levelBounds = new Rectangle(topLeft, bottomRight.x - topLeft.x,
+                            bottomRight.y - topLeft.x);
                 }
 
             }
