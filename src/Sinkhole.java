@@ -2,6 +2,8 @@ import bagel.Image;
 import bagel.Input;
 import bagel.util.Point;
 
+import java.util.ArrayList;
+
 public class Sinkhole extends StationaryEntity{
     private static final String SINKHOLE_PATH = "res/sinkhole.png";
     private static final Image SINKHOLE_IM = new Image(SINKHOLE_PATH);
@@ -32,4 +34,18 @@ public class Sinkhole extends StationaryEntity{
     public void updateGameEntity(Input input){
         drawGameEntity(SINKHOLE_IM);
     }
+
+    public void removeSinkhole(){
+        ArrayList<GameEntity> gameEntities = ShadowDimension.getInstance().getLevelInstance().getGameEntities();
+        for (int i = 0; i < gameEntities.size(); i++){
+            if (gameEntities.get(i).compareTo(this) == 0){
+                gameEntities.remove(i);
+            }
+
+        }
+    }
 }
+
+
+
+

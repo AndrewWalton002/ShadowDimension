@@ -70,8 +70,8 @@ public abstract class Level /**implements Drawable*/ {
 
                 player.updateGameEntity(input);
                 gameEntities.forEach((gameEntity -> gameEntity.updateGameEntity(input)));
-
-
+                break;
+            case GAME_LOST:
                 break;
 
         }
@@ -91,6 +91,9 @@ public abstract class Level /**implements Drawable*/ {
                 }
                 break;
             case LEVEL_RUNNING:
+                if (player.isDead()){
+                    gameState = GameState.GAME_LOST;
+                }
 
 
         }

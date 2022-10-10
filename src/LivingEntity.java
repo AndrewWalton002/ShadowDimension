@@ -65,7 +65,7 @@ public abstract class LivingEntity extends GameEntity {
 
     }
 
-    public boolean isValidMove(Point newPosition){
+    public Rectangle collidingWithRectangle(Point newPosition){
         // Check that attempted move is within the level bounds
         if (isInLevelBounds(newPosition)){
             ArrayList<GameEntity> gameEntities = ShadowDimension.getInstance().getLevelInstance().getGameEntities();
@@ -75,17 +75,13 @@ public abstract class LivingEntity extends GameEntity {
                     StationaryEntity stationaryEntity = (StationaryEntity) gameEntities.get(i);
                     if(isCollidingWithStationaryObject(newPosition, stationaryEntity)){
 
-                        // Remove the sinkhole is a player has collided with it
-                        if(this instanceof Player && stationaryEntity instanceof Sinkhole){
-                            gameEntities.remove(i);
-                        }
-                        return false;
+                        return stationaryEntity;
                     }
                 }
             }
-            return true;
+            return null;
         }
-        return false;
+        return ShadowDimension.getInstance().getLevelInstance().getLevelBounds();
     }
 
     public void damageLivingEntity(double damageAmount){

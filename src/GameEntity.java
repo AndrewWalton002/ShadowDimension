@@ -1,7 +1,7 @@
 import bagel.*;
 import bagel.util.*;
 
-public abstract class GameEntity extends Rectangle implements Drawable {
+public abstract class GameEntity extends Rectangle implements Drawable, Comparable<GameEntity>{
     private Point position;
     private int width;
     private int height;
@@ -53,6 +53,19 @@ public abstract class GameEntity extends Rectangle implements Drawable {
 
     public void drawGameEntity(Image image){
         image.drawFromTopLeft(position.x, position.y);
+    }
+
+    @Override
+    public int compareTo(GameEntity o){
+        if (this.NAME.compareTo(o.NAME) == 0 && this.position.x == o.position.x && this.position.y == o.position.y){
+            return 0;
+        } else if (this.position.x != o.position.x){
+            return (int)(this.position.x - o.position.x);
+        } else if (this.position.y != o.position.y) {
+            return (int) (this.position.y - o.position.y);
+        } else {
+            return this.NAME.compareTo(o.NAME);
+        }
     }
 
     public abstract void updateGameEntity(Input input);
