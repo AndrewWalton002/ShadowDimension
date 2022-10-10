@@ -25,6 +25,7 @@ public class Player extends LivingEntity{
     private final int PLAYER_HEALTH_BAR_X = 20;
     private final int PLAYER_HEALTH_BAR_Y = 25;
     private final Point PLAYER_HEALTH_BAR_POS = new Point(PLAYER_HEALTH_BAR_X, PLAYER_HEALTH_BAR_Y);
+    private static int PLAYER_HEALTH_BAR_FONT_SIZE = 30;
 
 
 
@@ -41,7 +42,7 @@ public class Player extends LivingEntity{
 
 
     public Player(Point position, double BASE_DAMAGE, String NAME, double max_health) {
-        super(position, STANDARD_WIDTH, HEIGHT, BASE_DAMAGE, NAME, max_health);
+        super(position, STANDARD_WIDTH, HEIGHT, BASE_DAMAGE, NAME, max_health, PLAYER_HEALTH_BAR_FONT_SIZE);
         setHeight(HEIGHT);
         setWidth(STANDARD_WIDTH);
         setMovementSpeed(PLAYER_MOVEMENT_SPEED);
@@ -50,11 +51,17 @@ public class Player extends LivingEntity{
 
     @Override
     public void updateGameEntity(Input input) {
+        super.updateGameEntity(input);
 
         Point newPos = getNewPosition(input);
 
+        inflictSinkHoleDamage(newPos,);
+
+
         if (isValidMove(newPos)) {
             setPosition(newPos);
+        } else {
+
         }
         drawGameEntity(currentPlayerImage());
     }
@@ -99,5 +106,11 @@ public class Player extends LivingEntity{
             newPosition = new Point(getPosition().x, getPosition().y + getMovementSpeed());
         }
         return newPosition;
+    }
+
+    public void inflictSinkHoleDamage(Point newPos, StationaryEntity stationaryEntity){
+        if (isCollidingWithStationaryObject(newPos, stationaryEntity) && stationaryEntity instanceof Sinkhole){
+            damageLivingEntity(stationaryEntity.getBASE_DAMAGE());
+        }
     }
 }

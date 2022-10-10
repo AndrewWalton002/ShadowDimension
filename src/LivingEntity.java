@@ -12,6 +12,8 @@ public abstract class LivingEntity extends GameEntity {
     private double movementSpeed;
     private Point healthBarPos;
     private boolean isFacingRight = true;
+    private HealthBar healthBar;
+    private final int HEALTH_BAR_FONT_SIZE;
 
     public boolean isFacingRight() {
         return isFacingRight;
@@ -44,10 +46,13 @@ public abstract class LivingEntity extends GameEntity {
         this.movementSpeed = movementSpeed;
     }
 
-    public LivingEntity(Point position, int width, int height, double BASE_DAMAGE, String name, double max_health) {
+    public LivingEntity(Point position, int width, int height, double BASE_DAMAGE, String name, double max_health,
+                        int healthBarFontSize) {
         super(position, width, height,  BASE_DAMAGE, name);
         this.MAX_HEALTH = max_health;
         this.currentHealth = max_health;
+        this.HEALTH_BAR_FONT_SIZE = healthBarFontSize;
+        this.healthBar = new HealthBar(HEALTH_BAR_FONT_SIZE);
     }
 
     public boolean isInLevelBounds(Point newPosition){
@@ -69,6 +74,11 @@ public abstract class LivingEntity extends GameEntity {
                 if (gameEntities.get(i) instanceof StationaryEntity) {
                     StationaryEntity stationaryEntity = (StationaryEntity) gameEntities.get(i);
                     if(isCollidingWithStationaryObject(newPosition, stationaryEntity)){
+
+                        // Remove the sinkhole is a player has collided with it
+                        if(this instanceof Player && stationaryEntity instanceof Sinkhole){
+                            gameEntities.remove(i);
+                        }
                         return false;
                     }
                 }
@@ -78,7 +88,16 @@ public abstract class LivingEntity extends GameEntity {
         return false;
     }
 
+    public void damageLivingEntity(double damageAmount){
+        currentHealth -= damageAmount;
+        if (currentHealth < 0){
+            currentHealth = 0;
+        }
+    }
 
-    public abstract void updateGameEntity(Input input);
+    public void updateGameEntity(Input input){
+        healthBar.updateHealthBar(healthBarPos, currentHealth, MAX_HEALTH);
+
+    }
 }
 

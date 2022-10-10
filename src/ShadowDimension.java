@@ -25,7 +25,7 @@ public class ShadowDimension extends AbstractGame {
     private final Font DEFAULT_FONT = new Font(FONT_PATH, DEFAULT_FONT_SIZE);
 
     private static final int REFRESH_RATE = 60;
-    private Level levelInstance;
+    private static Level levelInstance;
     private Levels currentLevel = Levels.LEVEL_0;
 
     private static ShadowDimension currentInstance;
@@ -52,7 +52,6 @@ public class ShadowDimension extends AbstractGame {
 
     public ShadowDimension(){
         super(WINDOW_WIDTH, WINDOW_HEIGHT, GAME_TITLE);
-        levelInstance = new Level0();
     }
 
     /**
@@ -70,6 +69,8 @@ public class ShadowDimension extends AbstractGame {
     public static ShadowDimension getInstance() {
         if (currentInstance == null) {
             currentInstance = new ShadowDimension();
+            levelInstance = new Level0();
+
         }
         return currentInstance;
     }
