@@ -20,8 +20,23 @@ public abstract class Level /**implements Drawable*/ {
 
     private GameState gameState;
     private static Level levelInstance;
+    private int frameCounter = 0;
+    private final int WIN_SCREEN_TIME = 3;
+    private int WIN_SCREEN_FRAMES = WIN_SCREEN_TIME * ShadowDimension.getRefreshRate();
     public void setGameState(GameState gameState) {
         this.gameState = gameState;
+    }
+
+    public int getWIN_SCREEN_FRAMES() {
+        return WIN_SCREEN_FRAMES;
+    }
+
+    public int getFrameCounter() {
+        return frameCounter;
+    }
+
+    public void setFrameCounter(int frameCounter) {
+        this.frameCounter = frameCounter;
     }
 
     public ArrayList<GameEntity> getGameEntities() {
@@ -36,6 +51,11 @@ public abstract class Level /**implements Drawable*/ {
         return LOSS_MESSAGE;
 
     }
+
+    public Player getPlayer() {
+        return player;
+    }
+
     public String getSTART_INSTRUCTION() {
         return START_INSTRUCTION;
     }
@@ -61,18 +81,25 @@ public abstract class Level /**implements Drawable*/ {
      * @param input user input
      */
     public void runLevel(Input input){
+        //Skip to level one
+        if (input.wasPressed(Keys.W)){
+            ShadowDimension.getInstance().levelUp();
+            return;
+        }
+
         switch (gameState){
             case START_SCREEN:
                 drawStartScreen();
                 break;
             case LEVEL_RUNNING:
                 drawBackground();
-
-                player.updateGameEntity(input);
                 gameEntities.forEach((gameEntity -> gameEntity.updateGameEntity(input)));
+                player.updateGameEntity(input);
                 break;
             case GAME_LOST:
+                drawLossScreen();
                 break;
+
 
         }
         updateGameState(input);
@@ -83,6 +110,7 @@ public abstract class Level /**implements Drawable*/ {
      * @param input user input
      */
     public void updateGameState(Input input){
+
         switch (gameState){
             case START_SCREEN:
                 // Game is started by pressing space
@@ -93,7 +121,11 @@ public abstract class Level /**implements Drawable*/ {
             case LEVEL_RUNNING:
                 if (player.isDead()){
                     gameState = GameState.GAME_LOST;
+                } else if (hasBeatLevel()){
+                    gameState = GameState.LEVEL_WON;
                 }
+
+
 
 
         }
@@ -139,6 +171,19 @@ public abstract class Level /**implements Drawable*/ {
                     gameEntities.add(sinkhole);
                 }
 
+                else if (currentLine[identifierIndex].compareTo(Tree.getTreeName()) == 0){
+                    Tree tree = new Tree(objectPosition, Tree.getTreeWidth(), Tree.getTreeHeight(),
+                                        Tree.getTreeDamage(), Tree.getTreeName());
+                    gameEntities.add(tree);
+                }
+
+                else if (currentLine[identifierIndex].compareTo(Demon.getDemonName()) == 0){
+                    // Need to adjust for aggressive demon randomly
+                    Demon demon = new Demon(objectPosition, Demon.getDemonWidth(), Demon.getDemonHeight(),
+                                        Demon.getDemonDamage(), Demon.getDemonName(), Demon.getDemonMaxHealth());
+                    gameEntities.add(demon);
+                }
+
 
                     // Determine to boundaries of the game from the CSV information
                 else if (currentLine[identifierIndex].compareTo(TOP_LEFT_INDICATOR) == 0){
@@ -162,8 +207,19 @@ public abstract class Level /**implements Drawable*/ {
         }
     }
 
+    public void drawLossScreen(){
+
+        Font defaultFont = ShadowDimension.getInstance().getDefaultFont();
+        defaultFont.drawString(LOSS_MESSAGE, ShadowDimension.getWindowWidth()/2 -
+                            defaultFont.getWidth(LOSS_MESSAGE)/2, ShadowDimension.getWindowHeight()/2 -
+                            ShadowDimension.getInstance().getDEFAULT_FONT_SIZE()/2);
+
+    }
+
     public abstract void drawStartScreen();
     public abstract void drawBackground();
+    public abstract boolean hasBeatLevel();
+    public abstract void drawLevelWinScreen();
 
 
 }

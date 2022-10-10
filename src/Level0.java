@@ -4,8 +4,11 @@ import bagel.util.Point;
 public class Level0 extends Level {
     private final int TITLE_MES_X = 260;
     private final int TITLE_MES_Y = 250;
+    private final int WIN_X_COORD = 950;
+    private final int WIN_Y_COORD = 670;
 
     private final String MOVE_INSTRUCTION = "USE ARROW KEYS TO FIND GATES";
+    private final String WIN_MESSAGE = "LEVEL COMPLETE!";
 
     private final int START_MES_GAP_X = 90;
     private final int START_MES_GAP_Y = 190;
@@ -23,18 +26,9 @@ public class Level0 extends Level {
         setGameState(GameState.START_SCREEN);
     }
 
-    /*@Override
-    public void runLevel(Input input){
-        super.runLevel(input);
-        switch (getGameState()){
-            case LEVEL_RUNNING:
-                BACKGROUND_IMAGE.draw(ShadowDimension.getWindowWidth()/2,ShadowDimension.getWindowHeight() / 2);
-        }
 
-
-    }*/
     public void drawBackground(){
-        BACKGROUND_IMAGE.draw(ShadowDimension.getWindowWidth()/2,ShadowDimension.getWindowHeight() / 2);
+        BACKGROUND_IMAGE.draw(ShadowDimension.getWindowWidth()/2,ShadowDimension.getWindowHeight()/2);
     }
 
     public void drawStartScreen(){
@@ -52,6 +46,39 @@ public class Level0 extends Level {
                                 START_MES_FONT.getWidth(MOVE_INSTRUCTION) / 2,
                              TITLE_MES_Y + START_MES_GAP_Y + getINTRA_START_MES_GAP());
 
+    }
 
+    @Override
+    public void runLevel(Input input){
+        super.runLevel(input);
+        if(getGameState() == GameState.LEVEL_WON){
+            if (getFrameCounter() < getWIN_SCREEN_FRAMES()){
+                drawLevelWinScreen();
+                setFrameCounter(getFrameCounter() + 1);
+            }
+        }
+    }
+
+    @Override
+    public void updateGameState(Input input){
+        super.updateGameState(input);
+        if (getGameState() == GameState.LEVEL_WON){
+            if (getFrameCounter() == getWIN_SCREEN_FRAMES()){
+                ShadowDimension.getInstance().levelUp();
+            }
+
+        }
+    }
+    @Override
+    public boolean hasBeatLevel(){
+        return getPlayer().topLeft().x >= WIN_X_COORD && getPlayer().topLeft().y >= WIN_Y_COORD;
+    }
+
+    @Override
+    public void drawLevelWinScreen(){
+        Font defaultFont = ShadowDimension.getInstance().getDefaultFont();
+        defaultFont.drawString(WIN_MESSAGE, ShadowDimension.getWindowWidth()/2 -
+                defaultFont.getWidth(WIN_MESSAGE)/2, ShadowDimension.getWindowHeight()/2 -
+                ShadowDimension.getInstance().getDEFAULT_FONT_SIZE()/2);
     }
 }

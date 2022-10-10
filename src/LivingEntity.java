@@ -15,6 +15,10 @@ public abstract class LivingEntity extends GameEntity {
     private HealthBar healthBar;
     private final int HEALTH_BAR_FONT_SIZE;
 
+    public double getMAX_HEALTH() {
+        return MAX_HEALTH;
+    }
+
     public boolean isFacingRight() {
         return isFacingRight;
     }
@@ -93,7 +97,11 @@ public abstract class LivingEntity extends GameEntity {
 
     public void updateGameEntity(Input input){
         healthBar.updateHealthBar(healthBarPos, currentHealth, MAX_HEALTH);
+    }
 
+    public void attackLog(GameEntity attacker){
+        Log attackLog = new Log(attacker, this);
+        attackLog.printLog();
     }
 }
 

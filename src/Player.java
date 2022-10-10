@@ -42,6 +42,7 @@ public class Player extends LivingEntity{
 
 
 
+
     public Player(Point position, double BASE_DAMAGE, String NAME, double max_health) {
         super(position, STANDARD_WIDTH, HEIGHT, BASE_DAMAGE, NAME, max_health, PLAYER_HEALTH_BAR_FONT_SIZE);
         setHeight(HEIGHT);
@@ -61,7 +62,9 @@ public class Player extends LivingEntity{
             setPosition(newPos);
         } else if (collidingObject instanceof Sinkhole){
             damageLivingEntity(((Sinkhole) collidingObject).getBASE_DAMAGE());
+            attackLog((GameEntity)(collidingObject));
             ((Sinkhole) collidingObject).removeSinkhole();
+
         }
         drawGameEntity(currentPlayerImage());
     }

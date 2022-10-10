@@ -34,6 +34,9 @@ public class ShadowDimension extends AbstractGame {
         return levelInstance;
     }
 
+    public static int getRefreshRate(){
+        return REFRESH_RATE;
+    }
     public static int getWindowWidth(){
         return WINDOW_WIDTH;
     }
@@ -48,6 +51,10 @@ public class ShadowDimension extends AbstractGame {
     }
     public Font getDefaultFont(){
         return DEFAULT_FONT;
+    }
+
+    public int getDEFAULT_FONT_SIZE() {
+        return DEFAULT_FONT_SIZE;
     }
 
     public ShadowDimension(){
@@ -89,4 +96,11 @@ public class ShadowDimension extends AbstractGame {
         levelInstance.runLevel(input);
 
     }
+
+    public void levelUp(){
+        levelInstance = new Level1();
+        currentLevel = Levels.LEVEL_1;
+    }
+
+
 }
