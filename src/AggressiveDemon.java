@@ -3,7 +3,7 @@ import bagel.Input;
 import bagel.util.Point;
 import bagel.util.Rectangle;
 
-public class AggressiveDemon extends Demon{
+public class AggressiveDemon extends Demon implements Moveable{
     private static final double MIN_AGG_DEMON_SPEED = 0.2;
     private static final double MAX_AGG_DEMON_SPEED = 0.7;
     private final double AGG_DEMON_SPEED = (Math.random() * (MAX_AGG_DEMON_SPEED - MIN_AGG_DEMON_SPEED + 1) *
@@ -27,22 +27,17 @@ public class AggressiveDemon extends Demon{
     public void updateGameEntity(Input input){
 
         Point newPos = getNewPosition();
-        Rectangle collidingObject = collidingWithRectangle(newPos);
-        if (collidingObject == null) {
-            setPosition(newPos);
-        } else {
-            changeDemonDirection();
-        }
+        tryMove(newPos);
         super.updateGameEntity(input);
 
 
 
     }
 
+
     public void setDemonDirection(){
 
         int randomDirectionInt = (int)(Math.random() * (NUM_DIRECTIONS - MIN_NUM_DIRECTIONS + 1) * MIN_NUM_DIRECTIONS);
-        System.out.println(randomDirectionInt);
 
         if (randomDirectionInt == NORTH_INT){
             demonDirection = DemonDirection.North;
@@ -86,7 +81,13 @@ public class AggressiveDemon extends Demon{
     }
 
 
-
-
-
+    @Override
+    public void tryMove(Point newPos) {
+        Rectangle collidingObject = collidingWithRectangle(newPos);
+        if (collidingObject == null) {
+            setPosition(newPos);
+        } else {
+            changeDemonDirection();
+        }
+    }
 }

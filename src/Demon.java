@@ -6,13 +6,13 @@ import java.util.Random;
 
 public class Demon extends LivingEntity{
     private static final String DEMON_LEFT_PATH = "res/demon/demonLeft.png";
-    private static final Image DEMON_LEFT_IMAGE = new Image(DEMON_LEFT_PATH);
+    private final Image DEMON_LEFT_IMAGE = new Image(DEMON_LEFT_PATH);
     private static final String DEMON_RIGHT_PATH = "res/demon/demonRight.png";
-    private static final Image DEMON_RIGHT_IMAGE = new Image(DEMON_RIGHT_PATH);
+    private final Image DEMON_RIGHT_IMAGE = new Image(DEMON_RIGHT_PATH);
     private static final String DEMON_INVINCIBLE_LEFT_PATH = "res/demon/demonInvincibleLeft.PNG";
-    private static final Image DEMON_INVINCIBLE_LEFT_IMAGE = new Image(DEMON_INVINCIBLE_LEFT_PATH);
+    private final Image DEMON_INVINCIBLE_LEFT_IMAGE = new Image(DEMON_INVINCIBLE_LEFT_PATH);
     private static final String DEMON_INVINCIBLE_RIGHT_PATH = "res/demon/demonInvincibleRight.PNG";
-    private static final Image DEMON_INVINCIBLE_RIGHT_IMAGE = new Image(DEMON_INVINCIBLE_RIGHT_PATH);
+    private final Image DEMON_INVINCIBLE_RIGHT_IMAGE = new Image(DEMON_INVINCIBLE_RIGHT_PATH);
     private static final int DEMON_WIDTH = 60;
     private static final int DEMON_HEIGHT = 38;
     private boolean isInvincible = false;
@@ -39,6 +39,19 @@ public class Demon extends LivingEntity{
         return DEMON_DAMAGE;
     }
 
+    public Image getLeftImage(){
+        return DEMON_LEFT_IMAGE;
+    }
+    public Image getRightImage(){
+        return DEMON_RIGHT_IMAGE;
+    }
+    public Image getInvincibleLeftImage(){
+        return DEMON_INVINCIBLE_LEFT_IMAGE;
+    }
+    public Image getInvincibleRightImage(){
+        return DEMON_INVINCIBLE_RIGHT_IMAGE;
+    }
+
 
     public Demon(Point position, int width, int height, double BASE_DAMAGE, String name, double max_health) {
         super(position, width, height, BASE_DAMAGE, name, max_health, DEMON_HEALTH_BAR_FONT_SIZE);
@@ -48,7 +61,8 @@ public class Demon extends LivingEntity{
 
     @Override
     public void updateGameEntity(Input input) {
-        drawGameEntity(getDemonImage());
+        drawGameEntity(getDemonImage(getInvincibleLeftImage(), getInvincibleRightImage(), getLeftImage(),
+                                    getRightImage()));
     }
 
 
@@ -61,18 +75,18 @@ public class Demon extends LivingEntity{
         }
     }
 
-    public Image getDemonImage(){
+    public Image getDemonImage(Image leftInvincible, Image rightInvincible, Image leftNormal, Image rightNormal){
         if (isInvincible) {
             if (isFacingRight()) {
-                return DEMON_INVINCIBLE_RIGHT_IMAGE;
+                return rightInvincible;
             } else {
-                return DEMON_INVINCIBLE_LEFT_IMAGE;
+                return leftInvincible;
             }
         } else {
             if (isFacingRight()){
-                return DEMON_RIGHT_IMAGE;
+                return rightNormal;
             } else {
-                return DEMON_LEFT_IMAGE;
+                return leftNormal;
             }
 
         }

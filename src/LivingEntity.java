@@ -15,6 +15,7 @@ public abstract class LivingEntity extends GameEntity {
     private HealthBar healthBar;
     private final int HEALTH_BAR_FONT_SIZE;
 
+
     public double getMAX_HEALTH() {
         return MAX_HEALTH;
     }
@@ -110,7 +111,6 @@ public abstract class LivingEntity extends GameEntity {
         } else{
             return false;
         }
-
     }
 }
 

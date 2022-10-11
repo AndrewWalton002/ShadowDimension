@@ -193,6 +193,12 @@ public abstract class Level /**implements Drawable*/ {
                     }
                 }
 
+                else if (currentLine[identifierIndex].compareTo(Navec.getNavecName()) == 0){
+                    Navec navec = new Navec(objectPosition, Navec.getNavecWidth(), Navec.getNavecHeight(),
+                                            Navec.getNavecDamage(), Navec.getNavecName(), Navec.getNavecMaxHealth());
+                    gameEntities.add(navec);
+                }
+
 
                     // Determine to boundaries of the game from the CSV information
                 else if (currentLine[identifierIndex].compareTo(TOP_LEFT_INDICATOR) == 0){

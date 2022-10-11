@@ -4,7 +4,7 @@ import bagel.Keys;
 import bagel.util.Point;
 import bagel.util.Rectangle;
 
-public class Player extends LivingEntity{
+public class Player extends LivingEntity implements Moveable{
     private final String STANDARD_LEFT_PATH = "res/fae/faeLeft.png";
     private final Image STANDARD_LEFT_IM = new Image(STANDARD_LEFT_PATH);
     private final String STANDARD_RIGHT_PATH = "res/fae/faeRight.png";
@@ -56,16 +56,7 @@ public class Player extends LivingEntity{
         super.updateGameEntity(input);
 
         Point newPos = getNewPosition(input);
-
-        Rectangle collidingObject = collidingWithRectangle(newPos);
-        if (collidingObject == null) {
-            setPosition(newPos);
-        } else if (collidingObject instanceof Sinkhole){
-            damageLivingEntity(((Sinkhole) collidingObject).getBASE_DAMAGE());
-            attackLog((GameEntity)(collidingObject));
-            ((Sinkhole) collidingObject).removeSinkhole();
-
-        }
+        tryMove(newPos);
         drawGameEntity(currentPlayerImage());
     }
 
@@ -112,5 +103,16 @@ public class Player extends LivingEntity{
     }
 
 
+    @Override
+    public void tryMove(Point newPos) {
+        Rectangle collidingObject = collidingWithRectangle(newPos);
+        if (collidingObject == null) {
+            setPosition(newPos);
+        } else if (collidingObject instanceof Sinkhole){
+            damageLivingEntity(((Sinkhole) collidingObject).getBASE_DAMAGE());
+            attackLog((GameEntity)(collidingObject));
+            ((Sinkhole) collidingObject).removeSinkhole();
 
+        }
+    }
 }
