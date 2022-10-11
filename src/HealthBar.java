@@ -32,9 +32,7 @@ public class HealthBar {
 
     public void updateHealthBar(Point position, double currentHealth, double maxHealth){
         int healthPercentage = (int)((currentHealth / maxHealth) * PERCENTAGE_MULTIPLIER);
-
         Colour healthBarColour = healthBarColour(healthPercentage);
-
         drawHealthBar(position, healthPercentage, healthBarColour);
     }
 

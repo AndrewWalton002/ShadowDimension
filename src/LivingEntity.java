@@ -14,10 +14,33 @@ public abstract class LivingEntity extends GameEntity {
     private boolean isFacingRight = true;
     private HealthBar healthBar;
     private final int HEALTH_BAR_FONT_SIZE;
+    private boolean isAttackMode = false;
+    private boolean isInvincible = false;
 
+    private boolean hasAttacked = false;
+
+    public boolean isInvincible() {
+        return isInvincible;
+    }
+
+    public boolean isHasAttacked() {
+        return hasAttacked;
+    }
+
+    public void setHasAttacked(boolean hasAttacked) {
+        this.hasAttacked = hasAttacked;
+    }
+
+    public boolean getIsAttackMode(){
+        return isAttackMode;
+    }
+    public void setIsAttackMode(boolean isAttackMode){
+        this.isAttackMode = isAttackMode;
+    }
     public double getMAX_HEALTH() {
         return MAX_HEALTH;
     }
+
 
     public boolean isFacingRight() {
         return isFacingRight;
@@ -59,9 +82,9 @@ public abstract class LivingEntity extends GameEntity {
         return ShadowDimension.getInstance().getLevelInstance().getLevelBounds().intersects(newPos);
     }
 
-    public boolean isCollidingWithStationaryObject(Point newPos, StationaryEntity stationaryEntity){
+    public boolean isCollidingWithGameObject(Point newPos, GameEntity gameEntity){
         this.moveTo(newPos);
-        return this.intersects(stationaryEntity);
+        return this.intersects(gameEntity);
 
     }
 
@@ -73,7 +96,7 @@ public abstract class LivingEntity extends GameEntity {
             for (int i = 0; i < gameEntities.size(); i++){
                 if (gameEntities.get(i) instanceof StationaryEntity) {
                     StationaryEntity stationaryEntity = (StationaryEntity) gameEntities.get(i);
-                    if(isCollidingWithStationaryObject(newPosition, stationaryEntity)){
+                    if(isCollidingWithGameObject(newPosition, stationaryEntity)){
 
                         return stationaryEntity;
                     }
@@ -85,7 +108,9 @@ public abstract class LivingEntity extends GameEntity {
     }
 
     public void damageLivingEntity(double damageAmount){
+
         currentHealth -= damageAmount;
+        goInvincible();
         if (currentHealth < 0){
             currentHealth = 0;
         }
@@ -107,5 +132,12 @@ public abstract class LivingEntity extends GameEntity {
             return false;
         }
     }
+
+    public void goInvincible(){
+        isInvincible = true;
+    }
+
+    public abstract void attackLivingEntity();
+
 }
 

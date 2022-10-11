@@ -15,7 +15,8 @@ public class Demon extends LivingEntity{
     private final Image DEMON_INVINCIBLE_RIGHT_IMAGE = new Image(DEMON_INVINCIBLE_RIGHT_PATH);
     private static final int DEMON_WIDTH = 60;
     private static final int DEMON_HEIGHT = 38;
-    private boolean isInvincible = false;
+    private static final int HEALTH_BAR_Y_OFFSET = 6;
+    private HealthBar healthBar = new HealthBar(DEMON_HEALTH_BAR_FONT_SIZE);
     private static final String DEMON_NAME = "Demon";
     private static final int DEMON_HEALTH_BAR_FONT_SIZE = 15;
     private static int DEMON_DAMAGE = 10;
@@ -24,7 +25,7 @@ public class Demon extends LivingEntity{
 
 
     public static int getDemonMaxHealth(){
-        return DEMON_DAMAGE;
+        return DEMON_MAX_HEALTH;
     }
     public static String getDemonName(){
         return DEMON_NAME;
@@ -57,12 +58,15 @@ public class Demon extends LivingEntity{
         super(position, width, height, BASE_DAMAGE, name, max_health, DEMON_HEALTH_BAR_FONT_SIZE);
         setMovementSpeed(DEMON_SPEED);
         setDemonFacingDirection();
+        setHealthBarPos(setDemonHealthBarPos());
     }
 
     @Override
     public void updateGameEntity(Input input) {
+        setHealthBarPos(setDemonHealthBarPos());
         drawGameEntity(getDemonImage(getInvincibleLeftImage(), getInvincibleRightImage(), getLeftImage(),
                                     getRightImage()));
+        super.updateGameEntity(input);
     }
 
 
@@ -76,7 +80,7 @@ public class Demon extends LivingEntity{
     }
 
     public Image getDemonImage(Image leftInvincible, Image rightInvincible, Image leftNormal, Image rightNormal){
-        if (isInvincible) {
+        if (isInvincible()) {
             if (isFacingRight()) {
                 return rightInvincible;
             } else {
@@ -91,5 +95,16 @@ public class Demon extends LivingEntity{
 
         }
     }
+
+    public Point setDemonHealthBarPos(){
+        Point pos = new Point(getPosition().x, getPosition().y - HEALTH_BAR_Y_OFFSET);
+        return pos;
+    }
+
+
+
+    @Override
+    public void attackLivingEntity(){}
+
 
 }

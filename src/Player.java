@@ -4,6 +4,9 @@ import bagel.Keys;
 import bagel.util.Point;
 import bagel.util.Rectangle;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
 public class Player extends LivingEntity implements Moveable{
     private final String STANDARD_LEFT_PATH = "res/fae/faeLeft.png";
     private final Image STANDARD_LEFT_IM = new Image(STANDARD_LEFT_PATH);
@@ -16,7 +19,6 @@ public class Player extends LivingEntity implements Moveable{
     private static final int ATTACK_WIDTH = 46;
     private static final int STANDARD_WIDTH = 40;
     private static final int HEIGHT = 59;
-    private PlayerState playerState = PlayerState.IDLE;
     private static final int PLAYER_BASE_DAMAGE = 20;
     private static final String PLAYER_NAME = "Fae";
     private static int PLAYER_MAX_HEALTH = 100;
@@ -31,7 +33,6 @@ public class Player extends LivingEntity implements Moveable{
     private int attackCooldownFramesLeft = 0;
     private final int ATTACK_COOLDOWN_TIME = 2;
     private final int ATTACK_COOLDOWN_FRAMES = ATTACK_COOLDOWN_TIME * ShadowDimension.getRefreshRate();
-    private boolean isAttackMode = false;
 
 
 
@@ -65,6 +66,9 @@ public class Player extends LivingEntity implements Moveable{
 
         updateAttackTimes();
         setAttackMode(input);
+        if (!isHasAttacked()){
+            attackLivingEntity();
+        }
 
         Point newPos = getNewPosition(input);
         tryMove(newPos);
@@ -77,9 +81,7 @@ public class Player extends LivingEntity implements Moveable{
      * @return Image the current image of the player
      */
     public Image currentPlayerImage(){
-        if (isAttackMode) {
-            //NEED TO DEAL WITH PLAYER WIDTH
-            // setWidth(ATTACK_WIDTH);
+        if (getIsAttackMode()) {
 
             if (isFacingRight()) {
                 return ATTACK_RIGHT_IM;
@@ -131,16 +133,17 @@ public class Player extends LivingEntity implements Moveable{
     public void setAttackMode(Input input){
         if (input.wasPressed(Keys.A) && attackCooldownFramesLeft == 0){
             attackFramesLeft = ATTACK_FRAMES;
-            isAttackMode = true;
+            setIsAttackMode(true);
         }
     }
 
     public void updateAttackTimes() {
-        if (isAttackMode) {
+        if (getIsAttackMode()) {
             if (attackFramesLeft > 0) {
                 attackFramesLeft--;
             } else if (attackFramesLeft == 0) {
-                isAttackMode = false;
+                setIsAttackMode(false);
+                setHasAttacked(false);
                 attackCooldownFramesLeft = ATTACK_COOLDOWN_FRAMES;
             }
         } else {
@@ -149,4 +152,22 @@ public class Player extends LivingEntity implements Moveable{
             }
         }
     }
+    @Override
+    public void attackLivingEntity(){
+        ArrayList<GameEntity> gameEntities = ShadowDimension.getInstance().getLevelInstance().getGameEntities();
+
+        for(int i = 0; i < gameEntities.size(); i++) {
+            if (gameEntities.get(i) instanceof LivingEntity) {
+                LivingEntity livingEntity = (LivingEntity) gameEntities.get(i);
+
+                if (getIsAttackMode() && !isHasAttacked() &&
+                    isCollidingWithGameObject(this.getPosition(), livingEntity)) {
+                    livingEntity.damageLivingEntity(this.PLAYER_BASE_DAMAGE);
+                    setHasAttacked(true);
+                }
+            }
+        }
+    }
+
+
 }
