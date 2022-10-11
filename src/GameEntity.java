@@ -1,7 +1,7 @@
 import bagel.*;
 import bagel.util.*;
 
-public abstract class GameEntity extends Rectangle implements Drawable, Comparable<GameEntity>{
+public abstract class GameEntity extends Rectangle implements Comparable<GameEntity>{
     private Point position;
     private int width;
     private int height;

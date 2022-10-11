@@ -16,8 +16,6 @@ public class Player extends LivingEntity implements Moveable{
     private static final int ATTACK_WIDTH = 46;
     private static final int STANDARD_WIDTH = 40;
     private static final int HEIGHT = 59;
-    private final int ATTACK_COOLDOWN = 2000;
-    private final int ATTACK_TIME = 1000;
     private PlayerState playerState = PlayerState.IDLE;
     private static final int PLAYER_BASE_DAMAGE = 20;
     private static final String PLAYER_NAME = "Fae";
@@ -27,6 +25,16 @@ public class Player extends LivingEntity implements Moveable{
     private final int PLAYER_HEALTH_BAR_Y = 25;
     private final Point PLAYER_HEALTH_BAR_POS = new Point(PLAYER_HEALTH_BAR_X, PLAYER_HEALTH_BAR_Y);
     private static int PLAYER_HEALTH_BAR_FONT_SIZE = 30;
+    private final int ATTACK_TIME = 1;
+    private final int ATTACK_FRAMES = ATTACK_TIME * ShadowDimension.getRefreshRate();
+    private int attackFramesLeft = ATTACK_FRAMES;
+    private int attackCooldownFramesLeft = 0;
+    private final int ATTACK_COOLDOWN_TIME = 2;
+    private final int ATTACK_COOLDOWN_FRAMES = ATTACK_COOLDOWN_TIME * ShadowDimension.getRefreshRate();
+    private boolean isAttackMode = false;
+
+
+
 
 
 
@@ -55,9 +63,13 @@ public class Player extends LivingEntity implements Moveable{
     public void updateGameEntity(Input input) {
         super.updateGameEntity(input);
 
+        updateAttackTimes();
+        setAttackMode(input);
+
         Point newPos = getNewPosition(input);
         tryMove(newPos);
         drawGameEntity(currentPlayerImage());
+
     }
 
     /** Determine which image of the player should be rendered
@@ -65,7 +77,7 @@ public class Player extends LivingEntity implements Moveable{
      * @return Image the current image of the player
      */
     public Image currentPlayerImage(){
-        if (playerState == PlayerState.ATTACK) {
+        if (isAttackMode) {
             //NEED TO DEAL WITH PLAYER WIDTH
             // setWidth(ATTACK_WIDTH);
 
@@ -113,6 +125,28 @@ public class Player extends LivingEntity implements Moveable{
             attackLog((GameEntity)(collidingObject));
             ((Sinkhole) collidingObject).removeSinkhole();
 
+        }
+    }
+
+    public void setAttackMode(Input input){
+        if (input.wasPressed(Keys.A) && attackCooldownFramesLeft == 0){
+            attackFramesLeft = ATTACK_FRAMES;
+            isAttackMode = true;
+        }
+    }
+
+    public void updateAttackTimes() {
+        if (isAttackMode) {
+            if (attackFramesLeft > 0) {
+                attackFramesLeft--;
+            } else if (attackFramesLeft == 0) {
+                isAttackMode = false;
+                attackCooldownFramesLeft = ATTACK_COOLDOWN_FRAMES;
+            }
+        } else {
+            if (attackCooldownFramesLeft > 0) {
+                attackCooldownFramesLeft--;
+            }
         }
     }
 }
