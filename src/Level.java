@@ -1,9 +1,11 @@
 import bagel.*;
+import bagel.util.Colour;
 import bagel.util.Point;
 import bagel.util.Rectangle;
 
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.Scanner;
 
 public abstract class Level /**implements Drawable*/ {
@@ -178,10 +180,17 @@ public abstract class Level /**implements Drawable*/ {
                 }
 
                 else if (currentLine[identifierIndex].compareTo(Demon.getDemonName()) == 0){
-                    // Need to adjust for aggressive demon randomly
-                    Demon demon = new Demon(objectPosition, Demon.getDemonWidth(), Demon.getDemonHeight(),
-                                        Demon.getDemonDamage(), Demon.getDemonName(), Demon.getDemonMaxHealth());
-                    gameEntities.add(demon);
+                    Random rand = new Random();
+                    if (rand.nextInt() % 2 != 0) {
+                        Demon demon = new Demon(objectPosition, Demon.getDemonWidth(), Demon.getDemonHeight(),
+                                            Demon.getDemonDamage(), Demon.getDemonName(), Demon.getDemonMaxHealth());
+                        gameEntities.add(demon);
+                    } else {
+                        AggressiveDemon aggressiveDemon = new AggressiveDemon(objectPosition, Demon.getDemonWidth(),
+                                                        Demon.getDemonHeight(), Demon.getDemonDamage(),
+                                                        Demon.getDemonName(), Demon.getDemonMaxHealth());
+                        gameEntities.add(aggressiveDemon);
+                    }
                 }
 
 
@@ -197,7 +206,7 @@ public abstract class Level /**implements Drawable*/ {
                 // Create the rectangle that the game is played inside
                 if (topLeft != null && bottomRight != null){
                     levelBounds = new Rectangle(topLeft, bottomRight.x - topLeft.x,
-                            bottomRight.y - topLeft.x);
+                            bottomRight.y - topLeft.y);
                 }
 
             }

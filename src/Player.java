@@ -111,18 +111,6 @@ public class Player extends LivingEntity{
         return newPosition;
     }
 
-    public void inflictSinkHoleDamage(Point newPos, StationaryEntity stationaryEntity){
-        if (isCollidingWithStationaryObject(newPos, stationaryEntity) && stationaryEntity instanceof Sinkhole){
-            damageLivingEntity(stationaryEntity.getBASE_DAMAGE());
-        }
-    }
 
-    public boolean isDead(){
-        if (getCurrentHealth() == 0){
-            return true;
-        } else{
-            return false;
-        }
 
-    }
 }

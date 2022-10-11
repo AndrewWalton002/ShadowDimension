@@ -59,8 +59,8 @@ public abstract class LivingEntity extends GameEntity {
         this.healthBar = new HealthBar(HEALTH_BAR_FONT_SIZE);
     }
 
-    public boolean isInLevelBounds(Point newPosition){
-        return ShadowDimension.getInstance().getLevelInstance().getLevelBounds().intersects(newPosition);
+    public boolean isInLevelBounds(Point newPos){
+        return ShadowDimension.getInstance().getLevelInstance().getLevelBounds().intersects(newPos);
     }
 
     public boolean isCollidingWithStationaryObject(Point newPos, StationaryEntity stationaryEntity){
@@ -102,6 +102,15 @@ public abstract class LivingEntity extends GameEntity {
     public void attackLog(GameEntity attacker){
         Log attackLog = new Log(attacker, this);
         attackLog.printLog();
+    }
+
+    public boolean isDead(){
+        if (getCurrentHealth() == 0){
+            return true;
+        } else{
+            return false;
+        }
+
     }
 }
 

@@ -1,3 +1,3 @@
 public enum DemonDirection {
-    N, E, S, W
+    North, East, South, West
 }
