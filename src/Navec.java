@@ -17,6 +17,17 @@ public class Navec extends AggressiveDemon{
     private static final int NAVEC_MULTIPLIER = 2;
     private static final int NAVEC_DAMAGE = NAVEC_MULTIPLIER * Demon.getDemonDamage();
     private static final int NAVEC_MAX_HEALTH = NAVEC_MULTIPLIER * Demon.getDemonMaxHealth();
+    private static final int NAVEC_FIRE_RANGE = 200;
+    Fire NAVEC_FIRE = new Fire(this, ShadowDimension.getInstance().getLevelInstance().getPlayer());
+
+
+    @Override
+    public int getFireRange(){
+        return NAVEC_FIRE_RANGE;
+    }
+
+
+
 
     public static int getNavecWidth(){
         return NAVEC_WIDTH;
@@ -35,6 +46,7 @@ public class Navec extends AggressiveDemon{
     }
     public Navec(Point position, int width, int height, double BASE_DAMAGE, String name, double max_health) {
         super(position, width, height, BASE_DAMAGE, name, max_health);
+        setFire(NAVEC_FIRE);
     }
 
     public Image getLeftImage(){

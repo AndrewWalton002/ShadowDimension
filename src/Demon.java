@@ -22,7 +22,14 @@ public class Demon extends LivingEntity{
     private static int DEMON_DAMAGE = 10;
     private static int DEMON_MAX_HEALTH = 40;
     private static int DEMON_SPEED = 0;
+    private int FIRE_RANGE = 150;
+    private final Fire DEMON_FIRE = new Fire(this,
+                                            ShadowDimension.getInstance().getLevelInstance().getPlayer());
+    private Fire fire;
 
+    public int getFireRange(){
+        return FIRE_RANGE;
+    }
 
     public static int getDemonMaxHealth(){
         return DEMON_MAX_HEALTH;
@@ -53,12 +60,22 @@ public class Demon extends LivingEntity{
         return DEMON_INVINCIBLE_RIGHT_IMAGE;
     }
 
+    public void setFire(Fire fire){
+        this.fire = fire;
+    }
+    public Fire getFire(){
+        return fire;
+    }
+
+
 
     public Demon(Point position, int width, int height, double BASE_DAMAGE, String name, double max_health) {
         super(position, width, height, BASE_DAMAGE, name, max_health, DEMON_HEALTH_BAR_FONT_SIZE);
         setMovementSpeed(DEMON_SPEED);
         setDemonFacingDirection();
         setHealthBarPos(setDemonHealthBarPos());
+        setFire(DEMON_FIRE);
+
     }
 
     @Override
@@ -66,6 +83,8 @@ public class Demon extends LivingEntity{
         setHealthBarPos(setDemonHealthBarPos());
         drawGameEntity(getDemonImage(getInvincibleLeftImage(), getInvincibleRightImage(), getLeftImage(),
                                     getRightImage()));
+        fire.updateFire();
+
         super.updateGameEntity(input);
     }
 
@@ -104,7 +123,15 @@ public class Demon extends LivingEntity{
 
 
     @Override
-    public void attackLivingEntity(){}
+    public void attackLivingEntity(){
+        Player player = ShadowDimension.getInstance().getLevelInstance().getPlayer();
+
+        if (!player.isInvincible()) {
+            player.damageLivingEntity(this.getBASE_DAMAGE());
+            player.attackLog(this);
+            player.goInvincible();
+        }
+    }
 
 
 }

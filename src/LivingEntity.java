@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public abstract class LivingEntity extends GameEntity {
     private final double MAX_HEALTH;
     private double currentHealth;
-    private final int INVINCIBLE_TIME = 3000;
+    private final int INVINCIBLE_TIME = 3;
     private double movementSpeed;
     private Point healthBarPos;
     private boolean isFacingRight = true;
@@ -16,6 +16,8 @@ public abstract class LivingEntity extends GameEntity {
     private final int HEALTH_BAR_FONT_SIZE;
     private boolean isAttackMode = false;
     private boolean isInvincible = false;
+    private final int TOTAL_INVINCIBILITY_FRAMES = INVINCIBLE_TIME * ShadowDimension.getRefreshRate();
+    private int invincibilityFrames = 0;
 
     private boolean hasAttacked = false;
 
@@ -31,12 +33,14 @@ public abstract class LivingEntity extends GameEntity {
         this.hasAttacked = hasAttacked;
     }
 
-    public boolean getIsAttackMode(){
+    public boolean getIsAttackMode() {
         return isAttackMode;
     }
-    public void setIsAttackMode(boolean isAttackMode){
+
+    public void setIsAttackMode(boolean isAttackMode) {
         this.isAttackMode = isAttackMode;
     }
+
     public double getMAX_HEALTH() {
         return MAX_HEALTH;
     }
@@ -45,7 +49,8 @@ public abstract class LivingEntity extends GameEntity {
     public boolean isFacingRight() {
         return isFacingRight;
     }
-    public void setIsFacingRight(Boolean isFacingRight){
+
+    public void setIsFacingRight(Boolean isFacingRight) {
         this.isFacingRight = isFacingRight;
     }
 
@@ -71,32 +76,32 @@ public abstract class LivingEntity extends GameEntity {
 
     public LivingEntity(Point position, int width, int height, double BASE_DAMAGE, String name, double max_health,
                         int healthBarFontSize) {
-        super(position, width, height,  BASE_DAMAGE, name);
+        super(position, width, height, BASE_DAMAGE, name);
         this.MAX_HEALTH = max_health;
         this.currentHealth = max_health;
         this.HEALTH_BAR_FONT_SIZE = healthBarFontSize;
         this.healthBar = new HealthBar(HEALTH_BAR_FONT_SIZE);
     }
 
-    public boolean isInLevelBounds(Point newPos){
+    public boolean isInLevelBounds(Point newPos) {
         return ShadowDimension.getInstance().getLevelInstance().getLevelBounds().intersects(newPos);
     }
 
-    public boolean isCollidingWithGameObject(Point newPos, GameEntity gameEntity){
+    public boolean isCollidingWithGameObject(Point newPos, GameEntity gameEntity) {
         this.moveTo(newPos);
         return this.intersects(gameEntity);
 
     }
 
-    public Rectangle collidingWithRectangle(Point newPosition){
+    public Rectangle collidingWithRectangle(Point newPosition) {
         // Check that attempted move is within the level bounds
-        if (isInLevelBounds(newPosition)){
+        if (isInLevelBounds(newPosition)) {
             ArrayList<GameEntity> gameEntities = ShadowDimension.getInstance().getLevelInstance().getGameEntities();
             // Iterate through all game entities, if it is a stationary object check if the move collides with it
-            for (int i = 0; i < gameEntities.size(); i++){
+            for (int i = 0; i < gameEntities.size(); i++) {
                 if (gameEntities.get(i) instanceof StationaryEntity) {
                     StationaryEntity stationaryEntity = (StationaryEntity) gameEntities.get(i);
-                    if(isCollidingWithGameObject(newPosition, stationaryEntity)){
+                    if (isCollidingWithGameObject(newPosition, stationaryEntity)) {
 
                         return stationaryEntity;
                     }
@@ -107,37 +112,50 @@ public abstract class LivingEntity extends GameEntity {
         return ShadowDimension.getInstance().getLevelInstance().getLevelBounds();
     }
 
-    public void damageLivingEntity(double damageAmount){
+    public void damageLivingEntity(double damageAmount) {
 
         currentHealth -= damageAmount;
         goInvincible();
-        if (currentHealth < 0){
+        if (currentHealth < 0) {
             currentHealth = 0;
         }
     }
 
-    public void updateGameEntity(Input input){
+    public void updateGameEntity(Input input) {
         healthBar.updateHealthBar(healthBarPos, currentHealth, MAX_HEALTH);
+        updateInvincibilityFrames();
     }
 
-    public void attackLog(GameEntity attacker){
+    public void attackLog(GameEntity attacker) {
         Log attackLog = new Log(attacker, this);
         attackLog.printLog();
     }
 
-    public boolean isDead(){
-        if (getCurrentHealth() == 0){
+    public boolean isDead() {
+        if (getCurrentHealth() == 0) {
             return true;
-        } else{
+        } else {
             return false;
         }
     }
 
-    public void goInvincible(){
+    public void goInvincible() {
         isInvincible = true;
+        invincibilityFrames = TOTAL_INVINCIBILITY_FRAMES;
+    }
+
+    public void updateInvincibilityFrames() {
+        if (isInvincible) {
+            if (invincibilityFrames > 0) {
+                invincibilityFrames--;
+            } else if (invincibilityFrames == 0) {
+                isInvincible = false;
+            }
+        }
     }
 
     public abstract void attackLivingEntity();
-
 }
+
+
 

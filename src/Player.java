@@ -125,7 +125,7 @@ public class Player extends LivingEntity implements Moveable{
         } else if (collidingObject instanceof Sinkhole){
             damageLivingEntity(((Sinkhole) collidingObject).getBASE_DAMAGE());
             attackLog((GameEntity)(collidingObject));
-            ((Sinkhole) collidingObject).removeSinkhole();
+            ((Sinkhole) collidingObject).removeGameEntity();
 
         }
     }
@@ -163,7 +163,12 @@ public class Player extends LivingEntity implements Moveable{
                 if (getIsAttackMode() && !isHasAttacked() &&
                     isCollidingWithGameObject(this.getPosition(), livingEntity)) {
                     livingEntity.damageLivingEntity(this.PLAYER_BASE_DAMAGE);
+                    livingEntity.attackLog(this);
                     setHasAttacked(true);
+
+                    if (livingEntity.isDead()){
+                        livingEntity.removeGameEntity();
+                    }
                 }
             }
         }

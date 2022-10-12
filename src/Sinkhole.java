@@ -35,15 +35,7 @@ public class Sinkhole extends StationaryEntity{
         drawGameEntity(SINKHOLE_IM);
     }
 
-    public void removeSinkhole(){
-        ArrayList<GameEntity> gameEntities = ShadowDimension.getInstance().getLevelInstance().getGameEntities();
-        for (int i = 0; i < gameEntities.size(); i++){
-            if (gameEntities.get(i).compareTo(this) == 0){
-                gameEntities.remove(i);
-            }
 
-        }
-    }
 }
 
 

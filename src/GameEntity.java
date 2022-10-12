@@ -1,6 +1,8 @@
 import bagel.*;
 import bagel.util.*;
 
+import java.util.ArrayList;
+
 public abstract class GameEntity extends Rectangle implements Comparable<GameEntity>{
     private Point position;
     private int width;
@@ -65,6 +67,17 @@ public abstract class GameEntity extends Rectangle implements Comparable<GameEnt
             return (int) (this.position.y - o.position.y);
         } else {
             return this.NAME.compareTo(o.NAME);
+        }
+    }
+
+    public void removeGameEntity(){
+        ArrayList<GameEntity> gameEntities = ShadowDimension.getInstance().getLevelInstance().getGameEntities();
+        for (int i = 0; i < gameEntities.size(); i++){
+            if (gameEntities.get(i).compareTo(this) == 0){
+                gameEntities.remove(i);
+                return;
+            }
+
         }
     }
 
