@@ -25,13 +25,9 @@ public class AggressiveDemon extends Demon implements Moveable{
 
     @Override
     public void updateGameEntity(Input input){
-
         Point newPos = getNewPosition();
         tryMove(newPos);
         super.updateGameEntity(input);
-
-
-
     }
 
 

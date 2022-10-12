@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 
-public abstract class Level /**implements Drawable*/ {
+public abstract class Level{
     private static final String LOSS_MESSAGE = "GAME OVER!";
     private final String START_INSTRUCTION = "PRESS SPACE TO START";
     private final int START_MES_SIZE = 40;
@@ -51,7 +51,6 @@ public abstract class Level /**implements Drawable*/ {
 
     public static String getLossMessage(){
         return LOSS_MESSAGE;
-
     }
 
     public Player getPlayer() {
@@ -101,8 +100,6 @@ public abstract class Level /**implements Drawable*/ {
             case GAME_LOST:
                 drawLossScreen();
                 break;
-
-
         }
         updateGameState(input);
     }
@@ -127,9 +124,6 @@ public abstract class Level /**implements Drawable*/ {
                     gameState = GameState.LEVEL_WON;
                 }
 
-
-
-
         }
     }
 
@@ -139,7 +133,6 @@ public abstract class Level /**implements Drawable*/ {
         int identifierIndex = 0;
         int xCoordIndex = 1;
         int yCoordIndex = 2;
-
 
         try (Scanner file = new Scanner(new FileReader(CSVpath))) {
 
@@ -223,12 +216,10 @@ public abstract class Level /**implements Drawable*/ {
     }
 
     public void drawLossScreen(){
-
         Font defaultFont = ShadowDimension.getInstance().getDefaultFont();
         defaultFont.drawString(LOSS_MESSAGE, ShadowDimension.getWindowWidth()/2 -
                             defaultFont.getWidth(LOSS_MESSAGE)/2, ShadowDimension.getWindowHeight()/2 -
                             ShadowDimension.getInstance().getDEFAULT_FONT_SIZE()/2);
-
     }
 
     public abstract void drawStartScreen();
