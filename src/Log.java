@@ -1,17 +1,30 @@
 public class Log {
-    private final GameEntity ATTACKER;
-    private final LivingEntity ATTACKED;
-    private final String LOG_STRING;
+    private GameEntity attacker;
+    private LivingEntity attacked;
+    private String logAttackString;
+    private String timescaleIncrementString;
+    private String timescaleDecrementString;
 
     public Log(GameEntity attacker, LivingEntity attacked){
-        this.ATTACKER = attacker;
-        this.ATTACKED = attacked;
-        this.LOG_STRING = ATTACKER.getNAME() + " inflicts damage points " + (int)ATTACKER.getBASE_DAMAGE() + " on " +
-                        ATTACKED.getNAME() + ". " + ATTACKED.getNAME() + "\'s current health: " +
-                        (int)ATTACKED.getCurrentHealth() + "/" + (int)ATTACKED.getMAX_HEALTH();
+        this.attacker = attacker;
+        this.attacked = attacked;
+        this.logAttackString = attacker.getNAME() + " inflicts damage points " + (int)attacker.getBASE_DAMAGE() +
+                        " on " + attacked.getNAME() + ". " + attacked.getNAME() + "\'s current health: " +
+                        (int)attacked.getCurrentHealth() + "/" + (int)attacked.getMAX_HEALTH();
+
+    }
+    public Log(){
+        this.timescaleIncrementString = "Sped up, Speed: " + ShadowDimension.getInstance().getTimesScale();
+        this.timescaleDecrementString = "Slowed down, Speed: " + ShadowDimension.getInstance().getTimesScale();
     }
 
-    public void printLog(){
-        System.out.println(LOG_STRING);
+    public void printAttackLog(){
+        System.out.println(logAttackString);
+    }
+    public void timescaleIncrementLog(){
+        System.out.println(timescaleIncrementString);
+    }
+    public void timescaleDecrementLog(){
+        System.out.println(timescaleDecrementString);
     }
 }
