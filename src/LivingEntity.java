@@ -124,7 +124,6 @@ public abstract class LivingEntity extends GameEntity {
             currentHealth = 0;
         }
     }
-
     /**
      * Update the living entity, by updating its health bar and the invincibility frames remaining
      * @param input user input
@@ -142,7 +141,6 @@ public abstract class LivingEntity extends GameEntity {
         Log attackLog = new Log(attacker, this);
         attackLog.printAttackLog();
     }
-
     /**
      * Determine if the living entity is dead or not
      * @return a boolean value of the living entity's dead state
@@ -154,12 +152,17 @@ public abstract class LivingEntity extends GameEntity {
             return false;
         }
     }
-
+    /**
+     * Make the living entity begin the invincibility phase after being attacked
+     */
     public void goInvincible() {
         isInvincible = true;
         invincibilityFrames = TOTAL_INVINCIBILITY_FRAMES;
     }
-
+    /**
+     * Decrement the number of frames that are left, if there are any frames left. If there are no invincibility frames
+     * left, thus, end the visibility phase
+     */
     public void updateInvincibilityFrames() {
         if (isInvincible) {
             if (invincibilityFrames > 0) {
@@ -169,9 +172,5 @@ public abstract class LivingEntity extends GameEntity {
             }
         }
     }
-
     public abstract void attackLivingEntity();
 }
-
-
-
