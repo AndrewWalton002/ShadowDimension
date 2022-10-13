@@ -6,8 +6,8 @@ import bagel.util.Rectangle;
 public class AggressiveDemon extends Demon implements Moveable{
     private static final double MIN_AGG_DEMON_SPEED = 0.2;
     private static final double MAX_AGG_DEMON_SPEED = 0.7;
-    private final double AGG_DEMON_SPEED = (Math.random() * (MAX_AGG_DEMON_SPEED - MIN_AGG_DEMON_SPEED + 1) *
-                                                            MIN_AGG_DEMON_SPEED);
+    private final double ORIGINAL_AGG_DEMON_SPEED = (Math.random() * (MAX_AGG_DEMON_SPEED - MIN_AGG_DEMON_SPEED + 1) *
+                                            MIN_AGG_DEMON_SPEED) ;
     private DemonDirection demonDirection;
     private static final int NUM_DIRECTIONS = 4;
     private static final int MIN_NUM_DIRECTIONS = 1;
@@ -19,12 +19,13 @@ public class AggressiveDemon extends Demon implements Moveable{
 
     public AggressiveDemon(Point position, int width, int height, double BASE_DAMAGE, String name, double max_health) {
         super(position, width, height, BASE_DAMAGE, name, max_health);
-        setMovementSpeed(AGG_DEMON_SPEED);
+        setMovementSpeed(ORIGINAL_AGG_DEMON_SPEED * ShadowDimension.getInstance().getGameSpeed());
         setDemonDirection();
     }
 
     @Override
     public void updateGameEntity(Input input){
+        setMovementSpeed(ORIGINAL_AGG_DEMON_SPEED * ShadowDimension.getInstance().getGameSpeed());
         Point newPos = getNewPosition();
         tryMove(newPos);
         super.updateGameEntity(input);

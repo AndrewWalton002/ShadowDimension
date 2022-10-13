@@ -36,9 +36,6 @@ public class Player extends LivingEntity implements Moveable{
 
 
 
-
-
-
     public static String getPlayerName(){
         return PLAYER_NAME;
     }
@@ -100,18 +97,19 @@ public class Player extends LivingEntity implements Moveable{
 
     public Point getNewPosition(Input input) {
         Point newPosition = getPosition();
+        double movementSpeed = getMovementSpeed();
 
         // Update the position and orientation of the player in accordance with the input
         if (input.isDown(Keys.LEFT)) {
-            newPosition = new Point(getPosition().x - getMovementSpeed(), getPosition().y);
+            newPosition = new Point(getPosition().x - movementSpeed, getPosition().y);
             setIsFacingRight(false);
         } else if (input.isDown(Keys.RIGHT)) {
-            newPosition = new Point(getPosition().x + getMovementSpeed(), getPosition().y);
+            newPosition = new Point(getPosition().x + movementSpeed, getPosition().y);
             setIsFacingRight(true);
         }else if (input.isDown(Keys.UP)) {
-            newPosition = new Point(getPosition().x, getPosition().y - getMovementSpeed());
+            newPosition = new Point(getPosition().x, getPosition().y - movementSpeed);
         }else if (input.isDown(Keys.DOWN)) {
-            newPosition = new Point(getPosition().x, getPosition().y + getMovementSpeed());
+            newPosition = new Point(getPosition().x, getPosition().y + movementSpeed);
         }
         return newPosition;
     }
