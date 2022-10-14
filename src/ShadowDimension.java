@@ -1,12 +1,10 @@
 import bagel.*;
-
 /**
  * Skeleton Code for SWEN20003 Project 2, Semester 2, 2022
  *
  * Please enter your name below
  * @author Andrew Walton 1272468
  */
-
 public class ShadowDimension extends AbstractGame {
     /** Game attributes */
     private final static int WINDOW_WIDTH = 1024;
